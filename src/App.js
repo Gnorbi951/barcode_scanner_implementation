@@ -1,14 +1,39 @@
 import React, { useEffect } from 'react';
 import BarcodeScannerComponent from "react-webcam-barcode-scanner";
- 
+
 function App() {
- 
-  const [ data, setData ] = React.useState('Not Found');
+
+  const [data, setData] = React.useState('Not Found');
+  const [proposedData, setPropsedData] = React.useState([]);
 
   useEffect(() => {
-      console.log(data);
-  }, [data])
- 
+    console.log(proposedData);
+    if (data !== 'Not Found') {
+      let Obj = { id: data, quantity: 1 };
+      if (proposedData === undefined) {
+        setPropsedData([Obj]);
+      } else {
+        let found = false;
+        let index = 0;
+        for (let singleData of proposedData) {
+          if (singleData.id === data) {
+            found = true;
+            break;
+          }
+          index++;
+        }
+        if (found) {
+          proposedData[index].quantity++;
+          setPropsedData(proposedData);
+        } else {
+          proposedData.push(Obj);
+          setPropsedData(proposedData);
+        }
+      }
+      console.log(proposedData);
+    }
+  }, [data]);
+
   return (
     <>
       <BarcodeScannerComponent
@@ -23,5 +48,5 @@ function App() {
     </>
   )
 }
- 
+
 export default App;
